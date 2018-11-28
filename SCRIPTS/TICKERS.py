@@ -72,4 +72,5 @@ class TICKER(object):
     return df 
 
 
+#%% Example Use
 #tickers = TICKER(base_url).parse()
