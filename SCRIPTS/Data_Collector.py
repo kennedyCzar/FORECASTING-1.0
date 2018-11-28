@@ -94,6 +94,7 @@ class Data_collector(object):
             STOCK_TICKER_.to_csv('TICKERS/STOCK_TICKER{}'.format(extension))
         print('======= Begin downloading stock dataset ======')
         try:
+            self.unavailable_ticks = []
             for self.TICK_SYMBOLS in self.TICKERS:
                 '''just in case your connection breaks, 
                 we'd like to save our progress! by appending
@@ -103,8 +104,15 @@ class Data_collector(object):
                     df = yahoo.download(self.TICK_SYMBOLS, start = self.START, end = datetime.now())
                     df.reset_index(inplace = True)
                     df.set_index("Date", inplace = True)
-                    df.to_csv('DATASET/{}.csv'.format(self.TICK_SYMBOLS))
+                    #check size of file before saving
+                    import sys
+                    if sys.getsizeof(df) <= 1024:
+                      pass
+                    else:
+                      df.to_csv('DATASET/{}.csv'.format(self.TICK_SYMBOLS))
                   except ValueError:
+                    print('{} is unavaible'.format(self.TICK_SYMBOLS))
+                    self.unavailable_ticks.append(self.TICK_SYMBOLS)
                     pass
                 else:
                     print('File Already existing: {}'.format(self.TICK_SYMBOLS))
@@ -112,6 +120,9 @@ class Data_collector(object):
             raise OSError('Something wrong with destination path: {}'.format(e))
         finally:
             print('Download Completed..Exiting!')
+            print('*'*40)
+            print('Unavailable tickers are \n{}\n'.format(self.unavailable_ticks))
+            print('A total of {} unavailable tickers'.format(len(self.unavailable_ticks)))
         
       
 if __name__ == '__main__':
@@ -120,12 +131,6 @@ if __name__ == '__main__':
     base_url = "https://www.interactivebrokers.com/en/index.php?f=2222&exch=mexi&showcategories=STK&p=&cc=&limit=100"
     Data_collector(path).STOCK_EXTRACTOR(base_url)
     
-    
-
-
-
-
-
 
 
 
