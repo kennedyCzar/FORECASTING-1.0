@@ -74,3 +74,8 @@ class TICKER(object):
 
 #%% Example Use
 #tickers = TICKER(base_url).parse()
+
+
+
+
+
