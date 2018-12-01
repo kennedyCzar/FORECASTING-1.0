@@ -5,10 +5,9 @@ Created on Wed Nov 21 14:57:09 2018
 @author: kennedy
 """
 #import class numpy
-#import numpy as np
+import numpy as np
 #import pandas class
 import pandas as pd
-
 
 class loc:
   '''
@@ -54,7 +53,7 @@ class loc:
     return data
   
 ##-------------------------------------------------------
- #%%
+#%%
       
 class stock(object):
   '''
@@ -230,6 +229,72 @@ class stock(object):
     '''
     return self.High - self.Low.shift(1)
   
+  '''
+  :Price function:: Utils
+  '''
+  def sma(self, df, n):
+    '''
+    Arguments:
+      df: dataframe or column vector
+      n: interval
+    :Return:
+      simple moving average
+    '''
+    self.df = df
+    self.n = n
+    
+    return self.df.rolling(self.n).mean()
+  
+  def ema(self, df, n):
+    '''
+    Arguments:
+      df: dataframe or column vector
+      n: interval
+    :Return:
+      simple moving average
+    '''
+    self.df = df
+    self.n = n
+    return self.df.ewm(self.n).mean()
+  
+  def returns(self, df):
+    '''
+    :Arguments:
+      df: x or dataframe vector
+      
+    :Return:
+      Stock returns
+    '''
+    self.df = df
+    return (self.df/ self.df.shift(1) - 1)
+  
+  def log_returns(self, df):
+    '''
+    :Arguments:
+      df: input feature vector
+      
+    :Returns:
+      log returns
+    '''
+    self.df = df
+    
+    return np.log(self.df / self.df.shift(1))
+    
+  def cm_annual_growth(self, df):
+    '''
+    :Argument:
+      df: dataframe
+    
+    ::Return:
+      Compound annual growth
+    '''
+    self.df = df
+    self.DAYS_IN_YEAR = 365.35
+    start = df.index[0]
+    end = df.index[-1]
+    
+    return np.power((df.ix[-1] / df.ix[0]), 1.0 / ((end - start).days / self.DAYS_IN_YEAR)) - 1.0
+  
   def quadrant(self):
     '''
     :Return:
@@ -336,6 +401,30 @@ class stock(object):
     return pd.DataFrame({'Open': self.Open, 'High': self.High,
                          'Low': self.Low, 'Close': self.Close})
   
+  def Bolinger_Band(self, price, dev):
+    '''
+    :Argument:
+      Price: average price to calculate bolinger band
+      Dev: deviation factor from the moving average
+    
+    :Return:
+      Upper, MAe and Lower price band.
+      MA: Moving Average
+      Upper: MA + std(Closing_price)
+      Lower: MA - std(Closing_price)
+      
+    '''
+    self.price = price
+    self.dev = dev
+    MA = self.Close.rolling(self.price).mean()
+    Upper_band = MA + 2 * self.Close.rolling(price).std()
+    Lower_band = MA - 2 * self.Close.rolling(price).std()
+    
+    return pd.DataFrame({'Moving Average': MA,
+                         'Upper_band': Upper_band,
+                         'Lower_band': Lower_band})
+  
+
   
   
   
