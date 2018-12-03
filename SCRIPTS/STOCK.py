@@ -204,7 +204,6 @@ class stock(object):
   Working functions
   '''
   
-  
   def hl_spread(self):
     '''
     :Return:
@@ -424,7 +423,36 @@ class stock(object):
                          'Upper_band': Upper_band,
                          'Lower_band': Lower_band})
   
+  
+  def MACD(self, n_fast, n_slow, signal):
+    '''
+    :Arguments:
+      :n_fast: <integer> representing fast exponential
+              moving average
+              
+      :n_slow: <integer> representing slow exponential
+              moving average
+              
+      :signal: Signal line
+      
+    :Return:
+      MACD: fast, slow and signal.
+    '''
+    
+    self.n_fast = n_fast
+    self.n_slow = n_slow
+    self.signal = signal
+    #defin MACD
+    macd = self.ema(self.Close, n_fast) - self.ema(self.Close, n_slow)
+    #MACD signal
+    macd_signal = self.ema(macd, signal)
+    #MACD histo
+    macd_histo_ = macd - macd_signal
+    return pd.DataFrame({'MACD': macd, 'MACD_HIST': macd_histo_,
+                         'MACD_SIGNAL': macd_signal})
+  
 
+    
   
   
   
