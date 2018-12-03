@@ -64,7 +64,7 @@ class Data_collector(object):
         finally:
             print('Process completed...Exiting')
            
-    def STOCK_EXTRACTOR(self, url):
+    def STOCK_EXTRACTOR(self, url, exist = False):
         '''
         :Functionality:
             Collects stock data using the yahoo API
@@ -115,7 +115,23 @@ class Data_collector(object):
                     self.unavailable_ticks.append(self.TICK_SYMBOLS)
                     pass
                 else:
-                    print('File Already existing: {}'.format(self.TICK_SYMBOLS))
+                  #this section redownloads the file even though it
+                  #is already existing..
+                  try:
+                    df = yahoo.download(self.TICK_SYMBOLS, start = self.START, end = datetime.now())
+                    df.reset_index(inplace = True)
+                    df.set_index("Date", inplace = True)
+                    #check size of file before saving
+                    import sys
+                    if sys.getsizeof(df) <= 1024:
+                      pass
+                    else:
+                      df.to_csv('DATASET/{}.csv'.format(self.TICK_SYMBOLS))
+                  except ValueError:
+                    print('{} is unavaible'.format(self.TICK_SYMBOLS))
+                    self.unavailable_ticks.append(self.TICK_SYMBOLS)
+                    pass
+#                    print('File Already existing: {}'.format(self.TICK_SYMBOLS))
         except OSError as e:
             raise OSError('Something wrong with destination path: {}'.format(e))
         finally:
@@ -129,7 +145,7 @@ if __name__ == '__main__':
     '''Define a path on your drive where this project folder is located'''
     path = 'D:\\GIT PROJECT\\ERIC_PROJECT101\\FREELANCE_KENNETH'
     base_url = "https://www.interactivebrokers.com/en/index.php?f=2222&exch=mexi&showcategories=STK&p=&cc=&limit=100"
-    Data_collector(path).STOCK_EXTRACTOR(base_url)
+    Data_collector(path).STOCK_EXTRACTOR(base_url, exist = True)
     
 
 
