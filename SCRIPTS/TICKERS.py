@@ -23,7 +23,7 @@ class TICKER(object):
         description
         
   :Return:
-    dataframe of table as seen on Ib website
+    dataframe of table as seen on IB website
     
   '''
   def __init__(self, url):
@@ -37,7 +37,7 @@ class TICKER(object):
     self.Currency = []
     
     #catch the page list
-    for ii in range(1, 36, 1):
+    for ii in range(1, 36):
       self.url = (self.url + "&page=%d" % ii)
       self.url_list.append(self.url)
     
@@ -70,12 +70,5 @@ class TICKER(object):
                        'Currency': self.Currency})
         
     return df 
-
-
-#%% Example Use
-#tickers = TICKER(base_url).parse()
-
-
-
 
 
