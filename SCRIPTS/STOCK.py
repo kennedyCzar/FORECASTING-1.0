@@ -8,6 +8,7 @@ Created on Wed Nov 21 14:57:09 2018
 import numpy as np
 #import pandas class
 import pandas as pd
+pd.options.mode.chained_assignment = None
 
 class loc:
   '''
@@ -36,8 +37,8 @@ class loc:
         else:
           os.chdir(path)
       else:
-        raise OSError('path not existing::'+
-                      'Ensure path is properly refrenced')
+        raise OSError('path not existing::'+\
+                      'Ensure path is properly referenced')
 
   def read_csv(csv):
     '''
@@ -221,6 +222,23 @@ class stock(object):
     
     return (self.Close + self.High + self.Low)/3
   
+  def average_true_range(self, df, n):
+        """
+        
+        :param df: pandas.DataFrame
+        :param n: data window
+        :return: pandas.DataFrame
+        """
+        i = 0
+        TR_l = [0]
+        while i < df.index[-1]:
+          TR = max(df.loc[i + 1, 'High'], df.loc[i, 'Close']) - min(df.loc[i + 1, 'Low'], df.loc[i, 'Close'])
+          TR_l.append(TR)
+          i = i + 1
+        TR_s = pd.Series(TR_l)
+        ATR = pd.Series(TR_s.ewm(span=n, min_periods=n).mean(), name='ATR_' + str(n))
+        return ATR
+  
   def true_range(self):
     '''
     Returns:
@@ -255,6 +273,19 @@ class stock(object):
     self.df = df
     self.n = n
     return self.df.ewm(self.n).mean()
+  
+  def std(self, df, n):
+    '''
+    Arguments:
+      df: dataframe or column vector
+      n: interval
+    :Return:
+      standard deviation of a price
+    '''
+    self.df = df
+    self.n = n
+    
+    return self.df.rolling(self.n).std()
   
   def returns(self, df):
     '''
@@ -400,6 +431,15 @@ class stock(object):
     return pd.DataFrame({'Open': self.Open, 'High': self.High,
                          'Low': self.Low, 'Close': self.Close})
   
+  def HL_PCT(self):
+    '''
+    :Return:
+      HL_PCT
+      PCT_CHNG
+    '''
+    return pd.DataFrame({'HL_PCT':(self.High - self.Low)/(self.Low*100),
+                         'PCT_CHNG': (self.Close - self.Open)/(self.Open*100)})
+  
   def Bolinger_Band(self, price, dev):
     '''
     :Argument:
@@ -412,14 +452,20 @@ class stock(object):
       Upper: MA + std(Closing_price)
       Lower: MA - std(Closing_price)
       
+    ex.
+    stock_class.Bollinger_Band(20,2)
     '''
     self.price = price
     self.dev = dev
-    MA = self.Close.rolling(self.price).mean()
-    Upper_band = MA + 2 * self.Close.rolling(price).std()
-    Lower_band = MA - 2 * self.Close.rolling(price).std()
+    #sma
+    MA = self.sma(self.Close, self.price)
+    #standard deviation
+    SDEV = self.std(self.Close, self.price)
+    SDEV = self.Close.rolling(self.price).std()
+    Upper_band = MA + (SDEV * self.dev)
+    Lower_band = MA - (SDEV * self.dev)
     
-    return pd.DataFrame({'Moving Average': MA,
+    return pd.DataFrame({'bollinger_band': MA,
                          'Upper_band': Upper_band,
                          'Lower_band': Lower_band})
   
@@ -445,16 +491,162 @@ class stock(object):
     #defin MACD
     macd = self.ema(self.Close, n_fast) - self.ema(self.Close, n_slow)
     #MACD signal
-    macd_signal = self.ema(macd, signal)
+    macd_signal = self.ema(macd, self.signal)
     #MACD histo
     macd_histo_ = macd - macd_signal
     return pd.DataFrame({'MACD': macd, 'MACD_HIST': macd_histo_,
                          'MACD_SIGNAL': macd_signal})
   
-
+  def WilderRSI(self, df, n):
+    """
+    Calculate Relative Strength Index(RSI) for given data.
+      :param df: pandas.DataFrame
+      :param n: data period
+    :Return: pandas.DataFrame
+    """
+    i = 0
+    UpI = [0]
+    DoI = [0]
+    while i + 1 <= len(df.index) - 1:
+      UpMove = df.ix[i + 1, 'High'] - df.ix[i, 'High']
+      DoMove = df.ix[i, 'Low'] - df.ix[i + 1, 'Low']
+      if UpMove > DoMove and UpMove > 0:
+        UpD = UpMove
+      else:
+        UpD = 0
+      UpI.append(UpD)
+      if DoMove > UpMove and DoMove > 0:
+        DoD = DoMove
+      else:
+        DoD = 0
+      DoI.append(DoD)
+      i = i + 1
+    UpI = pd.Series(UpI)
+    DoI = pd.Series(DoI)
+    PosDI = pd.Series(self.ema(UpI, n))
+    NegDI = pd.Series(self.ema(DoI, n))
+    RSI = pd.Series(PosDI / (PosDI + NegDI), name='WilderRSI_' + str(n))
+    return RSI*100
+  
+  def CutlerRSI(self, df, n):
+    """
+    Calculate Relative Strength Index(RSI) for given data.
+      :param df: pandas.DataFrame
+      :param n: data period
+    :Return: pandas.DataFrame
+    """
+    i = 0
+    UpI = [0]
+    DoI = [0]
+    while i + 1 <= len(df.index) - 1:
+      UpMove = df.ix[i + 1, 'High'] - df.ix[i, 'High']
+      DoMove = df.ix[i, 'Low'] - df.ix[i + 1, 'Low']
+      if UpMove > DoMove and UpMove > 0:
+        UpD = UpMove
+      else:
+        UpD = 0
+      UpI.append(UpD)
+      if DoMove > UpMove and DoMove > 0:
+        DoD = DoMove
+      else:
+        DoD = 0
+      DoI.append(DoD)
+      i = i + 1
+    UpI = pd.Series(UpI)
+    DoI = pd.Series(DoI)
+    PosDI = pd.Series(self.sma(UpI, n))
+    NegDI = pd.Series(self.sma(DoI, n))
+    RSI = pd.Series(PosDI / (PosDI + NegDI), name='RSI_Cutler_{}'.format(n))
+    return RSI*100
+  
+  def ATR(self, df, n):
+    '''
+    :Argument:
+      df:
+        dataframe
+      n: period
+      
+    :Return:
+      Average True Range
+    '''
+    df = df.copy(deep = True)
+    df['High_Low'] = abs(self.High - self.Low)
+    df['High_PrevClose'] = abs(self.High - self.Close.shift(1))
+    df['Low_PrevClose'] = abs(self.Low - self.Close.shift(1))
+    df['True_Range'] = df[['High_Low', 'High_PrevClose', 'Low_PrevClose']].max(axis = 1)
+    df = df.fillna(0)
+    df['ATR']=np.nan
+    df['ATR']= self.ema(df['True_Range'], n)
+    return df['ATR']
+  
+  def SuperTrend(self, df, multiplier, n):
+    '''
+    :Arguments:
+      df:
+        dataframe
+      :ATR:
+        Average True range
+      :multiplier:
+        factor to multiply with ATR for upper and lower band
+      :n:
+        period
     
-  
-  
+    :Return type:
+      Supertrend
+    '''
+    df = df.copy(deep = True)
+    ATR = self.ATR(df, n)
+    df['Upper_band_start'] = (self.High + self.Low)/2 + (multiplier * ATR)
+    df['Lower_band_start'] = (self.High + self.Low)/2 - (multiplier * ATR)
+    df = df.fillna(0)
+    df['SuperTrend'] = np.nan
+    #Upper_band
+    df['Upper_band']=df['Upper_band_start']
+    df['Lower_band']=df['Lower_band_start']
+    #Upper_band
+    for ii in range(n,df.shape[0]):
+        if df['Close'][ii-1]<=df['Upper_band'][ii-1]:
+            df['Upper_band'][ii]=min(df['Upper_band_start'][ii], df['Upper_band'][ii-1])
+        else:
+            df['Upper_band'][ii]=df['Upper_band_start'][ii] 
+            
+    #Lower_band
+    for ij in range(n,df.shape[0]):
+      if df['Close'][ij-1] >= df['Lower_band'][ij-1]:
+        df['Lower_band'][ij]=max(df['Lower_band_start'][ij], df['Lower_band'][ij-1])
+      else:
+        df['Lower_band'][ij]=df['Lower_band_start'][ij] 
+        
+    #SuperTrend 
+    for ik in range(1, len(df['SuperTrend'])):
+      if df['Close'][n - 1] <= df['Upper_band'][n - 1]:
+        df['SuperTrend'][n - 1] = df['Upper_band'][n - 1]
+      elif df['Close'][n - 1] > df['Upper_band'][ik]:
+        df = df.fillna(0)
+        df['SuperTrend'][n - 1] = df['Lower_band'][n - 1]
+    for sp in range(n,df.shape[0]):
+      if df['SuperTrend'][sp - 1] == df['Upper_band'][sp - 1] and\
+          df['Close'][sp]<=df['Upper_band'][sp]:
+        df['SuperTrend'][sp]=df['Upper_band'][sp]
+      elif  df['SuperTrend'][sp - 1] == df['Upper_band'][sp - 1] and\
+            df['Close'][sp]>=df['Upper_band'][sp]:
+        df['SuperTrend'][sp]=df['Lower_band'][sp]
+      elif df['SuperTrend'][sp - 1] == df['Lower_band'][sp - 1] and\
+            df['Close'][sp]>=df['Lower_band'][sp]:
+        df['SuperTrend'][sp]=df['Lower_band'][sp]
+      elif df['SuperTrend'][sp - 1] == df['Lower_band'][sp - 1] and\
+            df['Close'][sp] <= df['Lower_band'][sp]:
+        df['SuperTrend'][sp] = df['Upper_band'][sp]
+    #return supertrend only    
+    return df['SuperTrend']
+      
+      
+    
+        
+        
+    
+    
+
   
   
   
