@@ -227,9 +227,14 @@ def Scale_train_test(window, tr_days):
     :Y_test:
       untransformed Y 30%
   '''
-  X_transform = pd.DataFrame(StandardScaler().fit_transform(window),
-                             columns = [x for x in window.columns])
-  
+  if np.where(window.values >= np.finfo(np.float64).max)[1] == [] is True:
+    X_transform = pd.DataFrame(StandardScaler().fit_transform(window),
+                               columns = [x for x in window.columns])
+  else:
+    X_transform = pd.DataFrame(StandardScaler().fit_transform(np.where(window.values\
+                               >= np.finfo(np.float64).max,0, window)),
+                               columns = [x for x in window.columns])
+  #--
   X_train = X_transform.iloc[:-tr_days, 1:]
   Y_train = window.iloc[:-tr_days, 0].values
   X_test = X_transform.iloc[-tr_days:, 1:]
@@ -252,7 +257,11 @@ def RNN(data, trad_days, epochs):
 
   MinMax_SC = MinMaxScaler()
   
-  transformed_df = MinMax_SC.fit_transform(data)
+  if np.where(data.values >= np.finfo(np.float64).max)[1] == [] is True:
+    transformed_df = MinMax_SC.fit_transform(data)
+  else:
+    transformed_df = MinMax_SC.fit_transform(np.where(data.values \
+                                                      >= np.finfo(np.float64).max,0, data))
   
   X_train = transformed_df[:-trad_days, 1:]
   Y_train = MinMax_SC.fit_transform(pd.DataFrame(data.iloc[:-trad_days, 0].values))
