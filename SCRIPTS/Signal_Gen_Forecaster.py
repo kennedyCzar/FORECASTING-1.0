@@ -302,31 +302,31 @@ def Modeller(X_train, X_test, Y_train, Y_test, dt_, params, epochs):
   train_data=lgb.Dataset(X_train,Y_train)
   valid_data=lgb.Dataset(X_test,Y_test)
   
-  if X_train.shape[0] < params['min_child_samples']//2 and X_train.shape[0] > params['min_child_samples']//3:
+  if X_train.shape[0] < params['min_child_samples']//2 or X_train.shape[0] > params['min_child_samples']//3:
     params['min_child_samples'] //=100
     params['n_estimators'] //=1
-  elif X_train.shape[0] < params['min_child_samples']//3 and X_train.shape[0] > params['min_child_samples']//4:
+  elif X_train.shape[0] < params['min_child_samples']//3 or X_train.shape[0] > params['min_child_samples']//4:
     params['min_child_samples'] //=400
     params['n_estimators'] //= 4
-  elif X_train.shape[0] < params['min_child_samples']//4 and X_train.shape[0] > params['min_child_samples']//5:
+  elif X_train.shape[0] < params['min_child_samples']//4 or X_train.shape[0] > params['min_child_samples']//5:
     params['min_child_samples'] //=400
     params['n_estimators'] //=5
-  elif X_train.shape[0] < params['min_child_samples']//5 and X_train.shape[0] > params['min_child_samples']//6:
+  elif X_train.shape[0] < params['min_child_samples']//5 or X_train.shape[0] > params['min_child_samples']//6:
     params['min_child_samples'] //=400
     params['n_estimators'] //=5
-  elif X_train.shape[0] < params['min_child_samples']//7 and X_train.shape[0] > params['min_child_samples']//8:
+  elif X_train.shape[0] < params['min_child_samples']//7 or X_train.shape[0] > params['min_child_samples']//8:
     params['min_child_samples'] //=400
     params['n_estimators'] //=6
-  elif X_train.shape[0] < params['min_child_samples']//8 and X_train.shape[0] > params['min_child_samples']//9:
+  elif X_train.shape[0] < params['min_child_samples']//8 or X_train.shape[0] > params['min_child_samples']//9:
     params['min_child_samples'] //=400
     params['n_estimators'] //=6
-  elif X_train.shape[0] < params['min_child_samples']//10 and X_train.shape[0] > params['min_child_samples']//11:
+  elif X_train.shape[0] < params['min_child_samples']//10 or X_train.shape[0] > params['min_child_samples']//11:
     params['min_child_samples'] //=400
     params['n_estimators'] //=6
-  elif X_train.shape[0] < params['min_child_samples']//11 and X_train.shape[0] > params['min_child_samples']//12:
+  elif X_train.shape[0] < params['min_child_samples']//11 or X_train.shape[0] > params['min_child_samples']//12:
     params['min_child_samples'] //=400
     params['n_estimators'] //=6
-  elif X_train.shape[0] < params['min_child_samples']//12 and X_train.shape[0] > params['min_child_samples']//13:
+  elif X_train.shape[0] < params['min_child_samples']//12 or X_train.shape[0] > params['min_child_samples']//13:
     params['min_child_samples'] //=400
     params['n_estimators'] //=6
   elif X_train.shape[0] < params['min_child_samples']//15 :
@@ -713,7 +713,7 @@ if __name__ == '__main__':
             }
   
 #  next_day = datetime.today().date()datetime(2019, 2, 7)
-  next_day = datetime.today().date()
+  next_day = datetime(2019, 2, 5)#datetime.today().date()
   OHLC_features_ = ['years', #trading year
                   'days', #trading days
                   'months', #months
