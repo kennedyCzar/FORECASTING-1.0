@@ -17,6 +17,7 @@ import os
 from STOCK import stock, loc
 import pandas as pd
 import numpy as np
+pd.options.mode.chained_assignment = None
 import lightgbm as lgb
 from datetime import datetime
 import matplotlib.pyplot as plt
@@ -228,9 +229,14 @@ def Scale_train_test(window, tr_days):
     :Y_test:
       untransformed Y 30%
   '''
-  X_transform = pd.DataFrame(StandardScaler().fit_transform(window),
-                             columns = [x for x in window.columns])
-  
+  if np.where(window.values >= np.finfo(np.float64).max)[1] == [] is True:
+    X_transform = pd.DataFrame(StandardScaler().fit_transform(window),
+                               columns = [x for x in window.columns])
+  else:
+    X_transform = pd.DataFrame(StandardScaler().fit_transform(np.where(window.values\
+                               >= np.finfo(np.float64).max,0, window)),
+                               columns = [x for x in window.columns])
+    
   X_train = X_transform.iloc[:-tr_days, 1:]
   Y_train = window.iloc[:-tr_days, 0].values
   X_test = X_transform.iloc[-tr_days:, 1:]
@@ -253,8 +259,12 @@ def RNN(data, epochs):
 
   MinMax_SC = MinMaxScaler()
   
-  transformed_df = MinMax_SC.fit_transform(data)
-  
+  if np.where(data.values >= np.finfo(np.float64).max)[1] == [] is True:
+    transformed_df = MinMax_SC.fit_transform(data)
+  else:
+    transformed_df = MinMax_SC.fit_transform(np.where(data.values \
+                                                      >= np.finfo(np.float64).max,0, data))
+
   X_train = transformed_df[:-trad_days, 1:]
   Y_train = MinMax_SC.fit_transform(pd.DataFrame(data.iloc[:-trad_days, 0].values))
   X_test = transformed_df[-trad_days:, 1:]
@@ -389,7 +399,7 @@ if __name__ == '__main__':
   MAX_LAG = 25
   STEP = 5
   STOCK_name ='ALSEA.MX'
-  price = 'Low'
+  price = 'High'
   #Select Hyper-Parameters
   EPOCHS = 100
   params = {'metric' : 'auc',
@@ -412,7 +422,7 @@ if __name__ == '__main__':
             'loss': 'ls'
             }
   
-  next_day = datetime(2019, 1, 31)
+  next_day = datetime(2019, 2, 5)
   OHLC_features_ = ['years', #trading year
                   'days', #trading days
                   'months', #months
@@ -440,7 +450,9 @@ if __name__ == '__main__':
   #yhat for all models
   Forecast = Modeller(X_train, X_test, Y_train, Y_test, dt_range, params, EPOCHS)
   
-
+  #save to csv
+  loc.set_path('D:\\BITBUCKET_PROJECTS\\Forecasting 1.0\\PREDICTED')
+  Forecast.to_csv('{}_Single_forecasting.csv'.format(STOCK_name.strip('.MX')))
 
 
 
