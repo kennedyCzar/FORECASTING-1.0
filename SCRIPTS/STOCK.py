@@ -650,7 +650,7 @@ class stock(object):
       :keltner channel
     '''
     ATR = self.ATR(df, atr_period)
-    Mid_band = self.ema(df.Close, period)
+    Mid_band = self.ema(self.Close, period)
     Lower_band = Mid_band + multiplier * ATR.values
     Upper_band = Mid_band - multiplier * ATR.values
     return pd.DataFrame({'ul': Upper_band, 'ml': Mid_band, 'll': Lower_band})
