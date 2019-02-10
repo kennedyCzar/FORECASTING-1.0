@@ -639,6 +639,21 @@ class stock(object):
         df['SuperTrend'][sp] = df['Upper_band'][sp]
     #return supertrend only    
     return df['SuperTrend']
+
+  def Keltner_channel(self, df, period, atr_period, multiplier):
+    '''
+    :Arguments:
+      :period:
+      :atr_period:
+
+    :Return type:
+      :keltner channel
+    '''
+    ATR = self.ATR(df, atr_period)
+    Mid_band = self.ema(df, period)
+    Lower_band = Mid_band + multiplier * ATR
+    Upper_band = Mid_band - multiplier * ATR
+    return pd.DataFrame({'ul': Upper_band, 'ml': Mid_band, 'll': Lower_band})
       
       
     
