@@ -467,7 +467,7 @@ if __name__ == '__main__':
     xcast['{}'.format(STOCK_list_[ij].strip('.MX'))] = result
     
   Prediction_window = pd.DataFrame.from_dict(xcast).T
-  Prediction_window.columns = ['Open', 'High', 'Low', 'Close']
+  Prediction_window.columns = price
   
   #//Save prediction folder
   loc.set_path('D:\\BITBUCKET_PROJECTS\\Forecasting 1.0\\PREDICTED')
