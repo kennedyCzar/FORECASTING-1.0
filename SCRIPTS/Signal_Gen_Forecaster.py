@@ -713,7 +713,7 @@ if __name__ == '__main__':
             }
   
 #  next_day = datetime.today().date()datetime(2019, 2, 7)
-  next_day = datetime(2019, 2, 5)#datetime.today().date()
+  next_day = datetime(2019, 2, 10)#datetime.today().date()
   OHLC_features_ = ['years', #trading year
                   'days', #trading days
                   'months', #months
@@ -796,8 +796,8 @@ if __name__ == '__main__':
     ax2.plot(data.index, df_RSI.iloc[:, 0], lw = .5)
     ax2.axhline(y = UPPER_BOUND, linewidth=1, color='r')
     ax2.axhline(y = LOWER_BOUND, linewidth=1, color='g')
-    ax2.fill_between(data.index, df_RSI.iloc[:, 0], 70, where=(df_RSI.iloc[:, 0] >= 70), facecolor=FILLCOLOR, edgecolor=FILLCOLOR)
-    ax2.fill_between(data.index, df_RSI.iloc[:, 0], 30, where=(df_RSI.iloc[:, 0] <= 30), facecolor=FILLCOLOR, edgecolor=FILLCOLOR)
+    ax2.fill_between(data.index, df_RSI.iloc[:, 0], UPPER_BOUND, where=(df_RSI.iloc[:, 0] >= UPPER_BOUND), facecolor=FILLCOLOR, edgecolor=FILLCOLOR)
+    ax2.fill_between(data.index, df_RSI.iloc[:, 0], LOWER_BOUND, where=(df_RSI.iloc[:, 0] <= LOWER_BOUND), facecolor=FILLCOLOR, edgecolor=FILLCOLOR)
     ax2.axvline(x = dt_range[0], color='r', lw = .5)
     ax2.legend(loc="upper left")
     ax3.plot(data.index, data.Close, lw = .5)
@@ -822,8 +822,8 @@ if __name__ == '__main__':
     ax2.plot(data.index, df_RSI.iloc[:, 0], lw = .5)
     ax2.axhline(y = UPPER_BOUND, linewidth=1, color='r')
     ax2.axhline(y = LOWER_BOUND, linewidth=1, color='g')
-    ax2.fill_between(data.index, df_RSI.iloc[:, 0], 70, where=(df_RSI.iloc[:, 0] >= 70), facecolor=FILLCOLOR, edgecolor=FILLCOLOR)
-    ax2.fill_between(data.index, df_RSI.iloc[:, 0], 30, where=(df_RSI.iloc[:, 0] <= 30), facecolor=FILLCOLOR, edgecolor=FILLCOLOR)
+    ax2.fill_between(data.index, df_RSI.iloc[:, 0], UPPER_BOUND, where=(df_RSI.iloc[:, 0] >= UPPER_BOUND), facecolor=FILLCOLOR, edgecolor=FILLCOLOR)
+    ax2.fill_between(data.index, df_RSI.iloc[:, 0], LOWER_BOUND, where=(df_RSI.iloc[:, 0] <= LOWER_BOUND), facecolor=FILLCOLOR, edgecolor=FILLCOLOR)
     ax2.legend(loc="upper left")
     ax3.plot(data.index, data.Close, lw = .5)
     ax3.legend(loc="upper left")
