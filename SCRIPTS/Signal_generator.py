@@ -330,9 +330,11 @@ if __name__ == '__main__':
   #-----convert to the stock class--------------
   stock_data = stock(data)
   Fibo_SUP_RES_ = stock_data.fibonacci_pivot_point()
+  df_ketner = stock_data.Keltner_channel(data, PERIOD, PERIOD, MULTIPLIER)
   df_RSI = RSI_signal(data, PERIOD, lw_bound = LOWER_BOUND, up_bound = UPPER_BOUND)
   df_MACD = macd_crossOver(data, FAST, SLOW, SIGNAL)
   df_BB = bollinger_band_signal(data, PERIOD, deviation = DEVIATION, strategy = STRATEGY)
+  
   #-----select strategy for saving-------------------
   if STRATEGY == '2' or STRATEGY == '3':
     df_STrend = SuperTrend_signal(data, MULTIPLIER, PERIOD)
@@ -371,6 +373,7 @@ if __name__ == '__main__':
     ax4.plot(data.index, prediction.SuperTrend_signal, lw = .5)
     ax4.legend(loc="upper left")
     ax1.set_title('{} SIGNAL'.format(STOCK_NAME.strip('.MX')))
+    plt.show()
   else:
     fig, (ax1, ax2, ax3, ax4) = plt.subplots(4, 1, sharex = True)
     ax1.plot(data.index, df_MACD.MACD, lw = .5)
@@ -392,3 +395,7 @@ if __name__ == '__main__':
     ax4.plot(data.index, prediction.RSI_signal, lw = .5)
     ax4.legend(loc="upper left")
     ax1.set_title('{} SIGNAL'.format(STOCK_NAME.strip('.MX')))
+    plt.show()
+
+
+
