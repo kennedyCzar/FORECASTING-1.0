@@ -1,4 +1,5 @@
 # FORECASTING 1.0
+[![forthebadge made-with-python](http://ForTheBadge.com/images/badges/made-with-python.svg)](https://www.python.org/)
 
 An Implementation of a machine learning approach using sklearn, Recurrent and Gated
 Recurrent Unit(from Deep Learning)..
