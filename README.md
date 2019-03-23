@@ -1,4 +1,4 @@
-# FORECASTING 1.0
+# FORECASTING 1.0 [![HitCount](http://hits.dwyl.io/kennedyCzar/https://github.com/kennedyCzar/FORECASTING-1.0.svg)](http://hits.dwyl.io/kennedyCzar/https://github.com/kennedyCzar/FORECASTING-1.0) ![](https://img.shields.io/badge/python-v3.6-orange.svg)
 [![forthebadge made-with-python](http://ForTheBadge.com/images/badges/made-with-python.svg)](https://www.python.org/)
 
 An Implementation of a machine learning approach using sklearn, Recurrent and Gated
