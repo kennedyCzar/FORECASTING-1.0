@@ -71,3 +71,12 @@ This project is similar to the Facebook prophet except we havent compared the re
   <li>Edit name of stock on line 735</li>
   <li>The generated signals is saved in the PREDICTED FOLDER</li>
 </ul>
+
+
+## OUTPUT IMAGES
+
+![Image of AC](https://github.com/kennedyCzar/FORECASTING-1.0/blob/master/IMAGES/AC.png)
+![Image of Axtel](https://github.com/kennedyCzar/FORECASTING-1.0/blob/master/IMAGES/AXTEL1.png)
+![Image of img](https://github.com/kennedyCzar/FORECASTING-1.0/blob/master/IMAGES/IMG.png)
+![Image of img2](https://github.com/kennedyCzar/FORECASTING-1.0/blob/master/IMAGES/IMG2.png)
+![Image of Axtel](https://github.com/kennedyCzar/FORECASTING-1.0/blob/master/IMAGES/CEM1.png)
