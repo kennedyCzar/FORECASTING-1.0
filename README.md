@@ -1,8 +1,7 @@
 # FORECASTING 1.0 [![HitCount](http://hits.dwyl.io/kennedyCzar/https://github.com/kennedyCzar/FORECASTING-1.0.svg)](http://hits.dwyl.io/kennedyCzar/https://github.com/kennedyCzar/FORECASTING-1.0) ![](https://img.shields.io/badge/python-v3.6-orange.svg)
 [![forthebadge made-with-python](http://ForTheBadge.com/images/badges/made-with-python.svg)](https://www.python.org/)
 
-An Implementation of a machine learning approach using sklearn, Recurrent and Gated
-Recurrent Unit(from Deep Learning)..
+Forecasting Model for time-series implemented using ensemble models, Boosting Model and Recurrent Neural Network.
 
 The General idea is to be able to predict important features available from stock data.
 For this purpose only a few of the codes ar available at this point for the client or general
@@ -10,7 +9,7 @@ public.
 However, the working idea as implemented is still under construction and undergoing some
 ridiculously time consuming testing.
 
-The algorithm is also capable of forecasting future market prices by filtering out botg holidays and weekend before digesting the data.
+The algorithm is also capable of forecasting future market prices by filtering out bank holidays and weekend before digesting the data.
 
 This project is similar to the Facebook prophet except we havent compared the result that much to see which is better for forecasting. Our algo is infact capable of forecasting accurately the weekly prices. beyond that, the accuracy of forecasting reduces. Note that it also serves as a signal generator.
 
