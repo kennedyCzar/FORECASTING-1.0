@@ -63,7 +63,7 @@ This project is similar to the Facebook prophet except we havent compared the re
   <li>The generated signals is saved in the PREDICTED FOLDER</li>
 </ul>
 
-[Signal Generator](https://github.com/kennedyCzar/FORECASTING-1.0/blob/master/SCRIPTS/Signal_Gen_Forecaster.py)
+[Signal Generator Forecaster](https://github.com/kennedyCzar/FORECASTING-1.0/blob/master/SCRIPTS/Signal_Gen_Forecaster.py)
  <ul>
   <li>Script to generate signals and forecast future signals | </li>
   <li>Use the command <small>python Signal_Gen_Forecaster.py</small></li>
