@@ -1,6 +1,6 @@
 ########################################
 #
-# INCOMPLETE WORKING SCRIPTS
+# COMPLETE WORKING SCRIPTS
 #
 #######################################
 
@@ -14,6 +14,4 @@ It would lated be implemented to forecast the respective stock prices.
 
 3.	STOCK is the class designed to cater for the stock data
 
-4.	Bot is the trading both used to test the effectiveness of our strategy.
-It is however incomplete as this is the model behind it. The complete model caters
-for quite alot apart from what we have here.
+
