@@ -4,8 +4,6 @@
 #
 #######################################
 
-the scripts here is a partial script available to the client
-
 1.	Data_collector is an automated stock data miner for the projects which
 automatically collects data for analysis in the proped folders
 
