@@ -5,9 +5,6 @@ Forecasting Model for time-series implemented using ensemble models, Boosting Mo
 
 The General idea is to be able to predict important features available from stock data.
 
-However, the working idea as implemented is still under construction and undergoing some
-ridiculously time consuming testing.
-
 The algorithm is also capable of forecasting future market prices by filtering out bank holidays and weekend before digesting the data.
 
 This project is similar to the Facebook prophet except we havent compared the result that much to see which is better for forecasting. Our algo is infact capable of forecasting accurately the weekly prices. beyond that, the accuracy of forecasting reduces. Note that it also serves as a signal generator.
