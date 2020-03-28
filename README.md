@@ -4,8 +4,7 @@
 Forecasting Model for time-series implemented using ensemble models, Boosting Model and Recurrent Neural Network.
 
 The General idea is to be able to predict important features available from stock data.
-For this purpose only a few of the codes ar available at this point for the client or general
-public.
+
 However, the working idea as implemented is still under construction and undergoing some
 ridiculously time consuming testing.
 
