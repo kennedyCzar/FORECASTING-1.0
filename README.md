@@ -1,7 +1,7 @@
 # FORECASTING 1.0 [![HitCount](http://hits.dwyl.io/kennedyCzar/https://github.com/kennedyCzar/FORECASTING-1.0.svg)](http://hits.dwyl.io/kennedyCzar/https://github.com/kennedyCzar/FORECASTING-1.0) ![](https://img.shields.io/badge/python-v3.6-orange.svg)
 [![forthebadge made-with-python](http://ForTheBadge.com/images/badges/made-with-python.svg)](https://www.python.org/)
 
-Forecasting Model for time-series implemented using ensemble models, Boosting Model and Recurrent Neural Network.
+Forecasting 1.0 is an intellient model for time-series prediction and forecasting. Implemented using ensemble models, Boosting Model and Recurrent Neural Network.
 
 The General idea is to be able to predict important features available from stock data.
 
